@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Corbin Work Schedule</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+    }
+    h1 {
+        margin-bottom: 20px;
+    }
+    input {
+        font-size: 1rem;
+        padding: 8px;
+    }
+    button {
+        font-size: 1rem;
+        padding: 8px 15px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+    .result {
+        margin-top: 25px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<h1>Corbin Work Schedule (2026)</h1>
+
+<p>Select a date to check availability:</p>
+
+<input type="date" id="dateInput">
+<button onclick="checkAvailability()">Check</button>
+
+<div class="result" id="result"></div>
+
+<script>
+const blackouts = [
+    "2026-02-01",
+    "2026-02-22",
+    "2026-03-15",
+    "2026-03-17",
+    "2026-03-22",
+    "2026-04-28",
+    "2026-07-04",
+    "2026-07-05"
+];
+
+function checkAvailability() {
+    const input = document.getElementById("dateInput").value;
+    const result = document.getElementById("result");
+
+    if (!input) {
+        result.textContent = "Please select a date.";
+        return;
+    }
+
+    const date = new Date(input + "T00:00:00");
+    const year = date.getFullYear();
+    const weekday = date.toLocaleDateString("en-US", { weekday: "long" });
+
+    if (year !== 2026) {
+        result.textContent = "This schedule applies only to 2026.";
+        return;
+    }
+
+    if (blackouts.includes(input)) {
+        result.textContent = "❌ Not available (time off requested).";
+        return;
+    }
+
+    if (date <= new Date("2026-03-31")) {
+        result.textContent = 
+            (weekday === "Sunday" || weekday === "Tuesday")
+            ? "✅ Available (Jan–Mar: works Sundays and Tuesdays)."
+            : "❌ Not available (Jan–Mar: only Sundays and Tuesdays).";
+        return;
+    }
+
+    if (date <= new Date("2026-05-04")) {
+        result.textContent = 
+            (weekday === "Sunday" || weekday === "Tuesday")
+            ? "⚠️ Potentially available (Apr–May 4: one day per week)."
+            : "❌ Not available (Apr–May 4).";
+        return;
+    }
+
+    result.textContent = "✅ Available (May 5 onward: open availability).";
+}
+</script>
+
+</body>
+</html
